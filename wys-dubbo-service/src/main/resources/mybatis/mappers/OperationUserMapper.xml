@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wys.dubbo.dao.OperationUserMapper">
+    <resultMap type="com.wys.dubbo.model.OperationUser" id="OperationUserResultMap">
+        <result property="id" column="id"/>
+        <result property="account" column="account"/>
+        <result property="password" column="password"/>
+        <result property="name" column="name"/>
+        <result property="mobile" column="mobile"/>
+        <result property="email" column="email"/>
+        <result property="remark" column="remark"/>
+        <result property="state" column="state"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="createUser" column="create_user"/>
+        <result property="updateUser" column="update_user"/>
+    </resultMap>
+
+    <resultMap id="roleListMap" type="com.wys.dubbo.dto.OperationRoleEasyDto">
+        <result property="id" column="roleId" />
+        <result property="name" column="roleName" />
+    </resultMap>
+
+    <resultMap id="sysUserVOMap" type="com.wys.dubbo.dto.OperationSysUserDto">
+        <id column="id" property="id" />
+        <result property="account" column="account"/>
+        <result property="name" column="name"/>
+        <result property="mobile" column="mobile"/>
+        <result property="email" column="email"/>
+        <result property="remark" column="remark"/>
+        <result property="state" column="state"/>
+        <collection property="roleList"
+                    ofType="com.wys.dubbo.dto.OperationRoleEasyDto"
+                    resultMap="roleListMap"/>
+    </resultMap>
+
+    <sql id="sys_user_vo">
+        id,
+        account,
+        password,
+        name,
+        mobile,
+        email,
+        remark,
+        state,
+    </sql>
+    <sql id="table_columns">
+        id,
+        account,
+        password,
+        name,
+        mobile,
+        email,
+        remark,
+        state,
+        create_time,
+        update_time,
+        create_user,
+        update_user
+    </sql>
+    <sql id="entity_properties">
+        #{id},
+        #{account},
+        #{password},
+        #{name},
+        #{mobile},
+        #{email},
+        #{remark},
+        #{state},
+        #{createTime},
+        #{updateTime},
+        #{createUser},
+        #{updateUser}
+    </sql>
+
+    <sql id="entity_properties_batch">
+        #{item.id},
+        #{item.account},
+        #{item.password},
+        #{item.name},
+        #{item.mobile},
+        #{item.email},
+        #{item.remark},
+        #{item.state},
+        #{item.createTime},
+        #{item.updateTime},
+        #{item.createUser},
+        #{item.updateUser}
+    </sql>
+
+    <!-- 适用于主键自增类型 -->
+    <insert id="insert" parameterType="com.wys.dubbo.model.OperationUser" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into operation_user(
+        <include refid="table_columns"/>
+        )
+        values (
+        <include refid="entity_properties"/>
+        )
+    </insert>
+    <!-- 适用于主键自增类型  选择插入-->
+
+    <!-- 批量添加 适用于主键自增类型  不支持返回主键-->
+    <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true">
+        insert into operation_user(
+        <include refid="table_columns"/>
+        )
+        values
+        <foreach item="item" collection="list" separator=",">
+            (
+            <include refid="entity_properties_batch"/>
+            )
+        </foreach>
+    </insert>
+
+    <!-- 修改 -->
+    <update id="update" parameterType="com.wys.dubbo.model.OperationUser">
+        update operation_user
+        <trim prefix="set" suffixOverrides=",">
+            <if test="account != null ">account = #{account},</if>
+            <if test="password != null ">password = #{password},</if>
+            <if test="name != null ">name = #{name},</if>
+            <if test="mobile != null ">mobile = #{mobile},</if>
+            <if test="email != null ">email = #{email},</if>
+            <if test="remark != null ">remark = #{remark},</if>
+            <if test="state != null ">state = #{state},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="createUser != null ">create_user = #{createUser},</if>
+            <if test="updateUser != null ">update_user = #{updateUser},</if>
+        </trim>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <!-- 批量修改 -->
+    <update id="updateBatch" parameterType="java.util.List">
+        <foreach item="item" collection="list" separator=";">
+            update operation_user
+            <trim prefix="set" suffixOverrides=",">
+                <if test="item.account != null ">account = #{item.account},</if>
+                <if test="item.password != null ">password = #{item.password},</if>
+                <if test="item.name != null ">name = #{item.name},</if>
+                <if test="item.mobile != null ">mobile = #{item.mobile},</if>
+                <if test="item.email != null ">email = #{item.email},</if>
+                <if test="item.remark != null ">remark = #{item.remark},</if>
+                <if test="item.state != null ">state = #{item.state},</if>
+                <if test="item.createTime != null ">create_time = #{item.createTime},</if>
+                <if test="item.updateTime != null ">update_time = #{item.updateTime},</if>
+                <if test="item.createUser != null ">create_user = #{item.createUser},</if>
+                <if test="item.updateUser != null ">update_user = #{item.updateUser},</if>
+            </trim>
+            <where>
+                id = #{item.id}
+            </where>
+        </foreach>
+    </update>
+
+    <!--根据主键删除 -->
+    <delete id="delete" parameterType="Integer">
+        delete from operation_user
+        where
+        id = #{pk}
+    </delete>
+
+    <!-- 根据ID批量删除 -->
+    <delete id="deleteBatch" parameterType="java.util.List">
+        delete from operation_user
+        where id in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 根据Map删除，慎用！！ -->
+    <delete id="deleteByProperties" parameterType="java.util.Map">
+        delete from operation_user
+        <include refid="whereSql"/>
+    </delete>
+
+    <!-- 根据主键查询实体 -->
+    <select id="selectPk" resultMap="OperationUserResultMap" parameterType="Integer">
+        select
+        <include refid="table_columns"/>
+        from operation_user
+        where
+        id = #{pk}
+    </select>
+
+    <select id="selectPks" resultMap="OperationUserResultMap" parameterType="java.util.List">
+        select
+        <include refid="table_columns"/>
+        from operation_user
+        where id in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <!-- 根据Map参数查询 -->
+    <select id="select" resultMap="OperationUserResultMap" parameterType="java.util.Map">
+        select
+        <include refid="table_columns"/>
+        from operation_user
+        <include refid="whereSql"/>
+        <if test="orderBy != null and orderBy != ''">
+            order by ${orderBy}
+        </if>
+    </select>
+
+    <!-- 根据Map参数查询 -->
+    <select id="selectOne" resultMap="OperationUserResultMap" parameterType="java.util.Map">
+        select
+        <include refid="table_columns"/>
+        from operation_user
+        <include refid="whereSql"/>
+        limit 0,1
+    </select>
+
+    <!-- 分页查询 -->
+    <select id="selectPage" resultMap="OperationUserResultMap" parameterType="java.util.Map">
+        select
+        <include refid="table_columns"/>
+        from operation_user
+        <include refid="whereSql"/>
+        <if test="orderBy != null and orderBy != ''">
+            order by ${orderBy}
+        </if>
+    </select>
+
+    <!-- 使用like用法：columnName like concat('%',#columnName#,'%') -->
+    <sql id="whereSql">
+        <trim prefix="where" prefixOverrides="and | or ">
+
+            <if test="id != null ">and id = #{id}</if>
+            <if test="account != null ">and account = #{account}</if>
+            <if test="password != null ">and password = #{password}</if>
+            <if test="name != null ">and name = #{name}</if>
+            <if test="mobile != null ">and mobile = #{mobile}</if>
+            <if test="email != null ">and email = #{email}</if>
+            <if test="remark != null ">and remark = #{remark}</if>
+            <if test="state != null ">and state = #{state}</if>
+            <if test="createTime != null ">and create_time = #{createTime}</if>
+            <if test="updateTime != null ">and update_time = #{updateTime}</if>
+            <if test="createUser != null ">and create_user = #{createUser}</if>
+            <if test="updateUser != null ">and update_user = #{updateUser}</if>
+        </trim>
+    </sql>
+
+    <!--根据账号查询用户信息-->
+    <select id="queryOperationUserByAccount" resultMap="OperationUserResultMap">
+        select
+        <include refid="table_columns"/>
+        from operation_user
+        where account = #{account}
+    </select>
+
+    <!--查询当前最大id和总数-->
+    <select id="queryCountMax" resultType="com.wys.dubbo.dto.response.OperationSysUserPageRes" >
+        select count(ou.id) as total ,ifNull(max(ou.id),0)  as maxId
+        from operation_user ou
+        left join operation_user_role our ON our.operation_user_id = ou.id
+        left join operation_role orole ON  orole.id = our.operation_role_id and orole.state = 0
+        <where>
+            <if test="pageReq.account != null ">and ou.account = #{pageReq.account}</if>
+            <if test="pageReq.name != null ">and ou.name = #{pageReq.name}</if>
+            <if test="pageReq.mobile != null ">and ou.mobile = #{pageReq.mobile}</if>
+            <if test="pageReq.email != null ">and ou.email = #{pageReq.email}</if>
+            <if test="pageReq.state != null ">and ou.state = #{pageReq.state}</if>
+
+            <if test="pageReq.roleId != null ">and orole.id = #{pageReq.roleId}</if>
+
+
+            <if test="pageReq.maxId != null and pageReq.maxId >0 ">
+                and ou.id &lt;= #{pageReq.maxId}
+            </if>
+        </where>
+        order by ou.id asc
+    </select>
+
+    <!-- 分页查询 -->
+    <select id="selectSysUserPage"  resultMap="sysUserVOMap">
+        select
+        ou.id,
+        ou.account,
+        ou.name,
+        ou.mobile,
+        ou.email,
+        ou.remark,
+        ou.state,
+        orole.id as roleId,
+        orole.name as roleName
+
+        from operation_user ou
+        left join operation_user_role our ON our.operation_user_id = ou.id
+        left join operation_role orole ON  orole.id = our.operation_role_id and orole.state = 0
+        <where>
+
+            <if test="pageReq.account != null ">and ou.account = #{pageReq.account}</if>
+            <if test="pageReq.name != null ">and ou.name = #{pageReq.name}</if>
+            <if test="pageReq.mobile != null ">and ou.mobile = #{pageReq.mobile}</if>
+            <if test="pageReq.email != null ">and ou.email = #{pageReq.email}</if>
+            <if test="pageReq.state != null ">and ou.state = #{pageReq.state}</if>
+
+            <if test="pageReq.roleId != null ">and orole.id = #{pageReq.roleId}</if>
+
+
+            <if test="pageReq.maxId != null and pageReq.maxId >0 ">
+                and ou.id &lt;= #{pageReq.maxId}
+            </if>
+        </where>
+        order by ou.id asc
+        limit #{pageReq.page},#{pageReq.limit}
+    </select>
+
+</mapper>

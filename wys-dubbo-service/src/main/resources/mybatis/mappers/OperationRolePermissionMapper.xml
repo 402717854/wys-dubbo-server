@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wys.dubbo.dao.OperationRolePermissionMapper">
+    <resultMap type="com.wys.dubbo.model.OperationRolePermission" id="OperationRolePermissionResultMap">
+        <result property="id" column="id" />
+        <result property="operationRoleId" column="operation_role_id" />
+        <result property="operationMenuId" column="operation_menu_id" />
+    </resultMap>
+
+    <sql id="table_columns">
+            id,
+            operation_role_id,
+            operation_menu_id
+    </sql>
+    <sql id="entity_properties">
+            #{id},
+            #{operationRoleId},
+            #{operationMenuId}
+	</sql>
+
+    <sql id="entity_properties_batch">
+            #{item.id},
+            #{item.operationRoleId},
+            #{item.operationMenuId}
+	</sql>
+
+    <!-- 适用于主键自增类型 -->
+    <insert id="insert" parameterType="com.wys.dubbo.model.OperationRolePermission" useGeneratedKeys="true" keyProperty="id">
+        insert into operation_role_permission( <include refid="table_columns" /> )
+        values ( <include refid="entity_properties" /> )
+    </insert>
+    <!-- 适用于主键自增类型  选择插入-->
+
+    <!-- 批量添加 适用于主键自增类型  不支持返回主键-->
+    <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true">
+        insert into operation_role_permission( <include refid="table_columns" /> )
+        values
+        <foreach item="item" collection="list" separator="," >
+            ( <include refid="entity_properties_batch" /> )
+        </foreach>
+    </insert>
+
+    <!-- 修改 -->
+    <update id="update" parameterType="com.wys.dubbo.model.OperationRolePermission">
+        update operation_role_permission
+        <trim prefix="set" suffixOverrides=",">
+            <if test="operationRoleId != null ">operation_role_id = #{operationRoleId},</if>
+            <if test="operationMenuId != null ">operation_menu_id = #{operationMenuId},</if>
+        </trim>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <!-- 批量修改 -->
+    <update id="updateBatch" parameterType="java.util.List">
+        <foreach item="item" collection="list" separator=";" >
+            update operation_role_permission
+            <trim prefix="set" suffixOverrides=",">
+                <if test="item.operationRoleId != null ">operation_role_id = #{operationRoleId},</if>
+                <if test="item.operationMenuId != null ">operation_menu_id = #{operationMenuId},</if>
+            </trim>
+            <where>
+                id = #{id}
+            </where>
+        </foreach>
+    </update>
+
+    <!--根据主键删除 -->
+    <delete id="delete" parameterType="Integer">
+		delete from operation_role_permission
+		where
+			id = #{pk}
+	</delete>
+
+    <!-- 根据ID批量删除 -->
+    <delete id="deleteBatch" parameterType="java.util.List">
+        delete from operation_role_permission
+        where id  in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 根据Map删除，慎用！！ -->
+    <delete id="deleteByProperties" parameterType="java.util.Map">
+        delete from operation_role_permission
+        <include refid="whereSql" />
+    </delete>
+
+    <!-- 根据主键查询实体 -->
+    <select id="selectPk" resultMap="OperationRolePermissionResultMap" parameterType="Integer" >
+        select <include refid="table_columns" />
+        from operation_role_permission
+        where
+        id = #{pk}
+    </select>
+
+    <select id="selectPks" resultMap="OperationRolePermissionResultMap" parameterType="java.util.List">
+        select
+        <include refid="table_columns"/>
+        from operation_role_permission
+        where id  in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <!-- 根据Map参数查询 -->
+    <select id="select" resultMap="OperationRolePermissionResultMap" parameterType="java.util.Map">
+        select <include refid="table_columns" />
+        from operation_role_permission
+        <include refid="whereSql" />
+        <if test="orderBy != null and orderBy != ''">
+            order by ${orderBy}
+        </if>
+    </select>
+
+    <!-- 根据Map参数查询 -->
+    <select id="selectOne" resultMap="OperationRolePermissionResultMap" parameterType="java.util.Map">
+        select <include refid="table_columns" />
+        from operation_role_permission
+        <include refid="whereSql" />
+        limit 0,1
+    </select>
+
+    <!-- 分页查询 -->
+    <select id="selectPage" resultMap="OperationRolePermissionResultMap" parameterType="java.util.Map">
+        select <include refid="table_columns" />
+        from operation_role_permission
+        <include refid="whereSql" />
+        <if test="orderBy != null and orderBy != ''">
+            order by ${orderBy}
+        </if>
+    </select>
+
+    <!-- 使用like用法：columnName like concat('%',#columnName#,'%') -->
+    <sql id="whereSql">
+        <trim prefix="where" prefixOverrides="and | or ">
+
+            <if test="id != null "> and id = #{id} </if>
+            <if test="operationRoleId != null "> and operation_role_id = #{operationRoleId} </if>
+            <if test="operationMenuId != null "> and operation_menu_id = #{operationMenuId} </if>
+        </trim>
+    </sql>
+
+    <!--根据菜单Id查询全部角色id-->
+    <select id="selectRoleIdSByMenuList" resultType="java.lang.Integer">
+        select id
+        from operation_role_permission
+        where 1=1 and
+        <if test="null != list and list.size > 1">
+            operation_menu_id in
+            <foreach collection="list" index="index" item="item" open="("
+                     separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="null != list and list.size = 1">
+            operation_menu_id =
+            <foreach collection="list" index="index" item="item" >
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <!--根据角色id查询菜单Id-->
+    <select id="selectMenuIdSByRoleIdList" resultType="java.lang.Integer">
+        select operation_menu_id
+        from operation_role_permission
+        where 1=1 and
+        <if test="null != list and list.size > 1">
+            operation_role_id in
+            <foreach collection="list" index="index" item="item" open="("
+                     separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="null != list and list.size = 1">
+            operation_role_id =
+            <foreach collection="list" index="index" item="item" >
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <!--根据角色Id删除对应关系 -->
+    <delete id="deletePermissionByRoleId" parameterType="Integer">
+        delete from operation_role_permission
+        where
+        operation_role_id = #{roleId}
+    </delete>
+
+    <!--根据菜单Id查询可用菜单代码权限-->
+<!--    <select id="selectValidMenuIdByRoleId" resultType="java.lang.String">-->
+<!--        select distinct om.permission_detail-->
+<!--        from operation_role_permission orp-->
+<!--        left join operation_menu om on om.id = orp.operation_menu_id-->
+<!--        where-->
+<!--        orp.operation_role_id = #{roleId}-->
+<!--        and om.state = 0-->
+
+<!--    </select>-->
+
+    <!--根据菜单Id查询可用菜单代码权限-->
+    <select id="selectValidMenuIdByRoleId" resultType="java.lang.Integer">
+        select distinct operation_menu_id
+        from operation_role_permission
+        where
+        operation_role_id = #{roleId}
+
+
+    </select>
+
+
+</mapper>

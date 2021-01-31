@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wys.dubbo.dao.OperationMenuMapper">
+    <resultMap type="com.wys.dubbo.model.OperationMenu" id="OperationMenuResultMap">
+        <result property="id" column="id" />
+        <result property="parentId" column="parent_id" />
+        <result property="name" column="name" />
+        <result property="sortBy" column="sort_by" />
+        <result property="type" column="type" />
+        <result property="icon" column="icon" />
+        <result property="url" column="url" />
+        <result property="permissionDetail" column="permission_detail" />
+        <result property="remark" column="remark" />
+        <result property="state" column="state" />
+        <result property="createUser" column="create_user" />
+        <result property="updateUser" column="update_user" />
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="table_columns_alias">
+        id,
+        parent_id as parentId,
+        name,
+        sort_by as sortBy,
+        type,
+        icon,
+        url,
+        permission_detail permissionDetail,
+        remark,
+        state
+
+    </sql>
+
+    <sql id="table_columns">
+            id,
+            parent_id,
+            name,
+            sort_by,
+            type,
+            icon,
+            url,
+            permission_detail,
+            remark,
+            state,
+            create_user,
+            update_user,
+            create_time,
+            update_time
+    </sql>
+    <sql id="entity_properties">
+            #{id},
+            #{parentId},
+            #{name},
+            #{sortBy},
+            #{type},
+            #{icon},
+            #{url},
+            #{permissionDetail},
+            #{remark},
+            #{state},
+            #{createUser},
+            #{updateUser},
+            #{createTime},
+            #{updateTime}
+	</sql>
+
+    <sql id="entity_properties_batch">
+            #{item.id},
+            #{item.parentId},
+            #{item.name},
+            #{item.sortBy},
+            #{item.type},
+            #{item.icon},
+            #{item.url},
+            #{item.permissionDetail},
+            #{item.remark},
+            #{item.state},
+            #{item.createUser},
+            #{item.updateUser},
+            #{item.createTime},
+            #{item.updateTime}
+	</sql>
+
+    <!-- 适用于主键自增类型 -->
+    <insert id="insert" parameterType="com.wys.dubbo.model.OperationMenu" useGeneratedKeys="true" keyProperty="id">
+        insert into operation_menu( <include refid="table_columns" /> )
+        values ( <include refid="entity_properties" /> )
+    </insert>
+    <!-- 适用于主键自增类型  选择插入-->
+
+    <!-- 批量添加 适用于主键自增类型  不支持返回主键-->
+    <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true">
+        insert into operation_menu( <include refid="table_columns" /> )
+        values
+        <foreach item="item" collection="list" separator="," >
+            ( <include refid="entity_properties_batch" /> )
+        </foreach>
+    </insert>
+
+    <!-- 修改 -->
+    <update id="update" parameterType="com.wys.dubbo.model.OperationMenu">
+        update operation_menu
+        <trim prefix="set" suffixOverrides=",">
+            <if test="parentId != null ">parent_id = #{parentId},</if>
+            <if test="name != null ">name = #{name},</if>
+            <if test="sortBy != null ">sort_by = #{sortBy},</if>
+            <if test="type != null ">type = #{type},</if>
+            <if test="icon != null ">icon = #{icon},</if>
+            <if test="url != null ">url = #{url},</if>
+            <if test="permissionDetail != null ">permission_detail = #{permissionDetail},</if>
+            <if test="remark != null ">remark = #{remark},</if>
+            <if test="state != null ">state = #{state},</if>
+            <if test="createUser != null ">create_user = #{createUser},</if>
+            <if test="updateUser != null ">update_user = #{updateUser},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <!-- 批量修改 -->
+    <update id="updateBatch" parameterType="java.util.List">
+        <foreach item="item" collection="list" separator=";" >
+            update operation_menu
+            <trim prefix="set" suffixOverrides=",">
+                <if test="item.parentId != null ">parent_id = #{parentId},</if>
+                <if test="item.name != null ">name = #{name},</if>
+                <if test="item.sortBy != null ">sort_by = #{sortBy},</if>
+                <if test="item.type != null ">type = #{type},</if>
+                <if test="item.icon != null ">icon = #{icon},</if>
+                <if test="item.url != null ">url = #{url},</if>
+                <if test="item.permissionDetail != null ">permission_detail = #{permissionDetail},</if>
+                <if test="item.remark != null ">remark = #{remark},</if>
+                <if test="item.state != null ">state = #{state},</if>
+                <if test="item.createUser != null ">create_user = #{createUser},</if>
+                <if test="item.updateUser != null ">update_user = #{updateUser},</if>
+                <if test="item.createTime != null ">create_time = #{createTime},</if>
+                <if test="item.updateTime != null ">update_time = #{updateTime},</if>
+            </trim>
+            <where>
+                id = #{id}
+            </where>
+        </foreach>
+    </update>
+
+    <!--根据主键删除 -->
+    <delete id="delete" parameterType="Integer">
+		delete from operation_menu
+		where
+			id = #{pk}
+	</delete>
+
+    <!-- 根据ID批量删除 -->
+    <delete id="deleteBatch" parameterType="java.util.List">
+        delete from operation_menu
+        where id  in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 根据Map删除，慎用！！ -->
+    <delete id="deleteByProperties" parameterType="java.util.Map">
+        delete from operation_menu
+        <include refid="whereSql" />
+    </delete>
+
+    <!-- 根据主键查询实体 -->
+    <select id="selectPk" resultMap="OperationMenuResultMap" parameterType="Integer" >
+        select <include refid="table_columns" />
+        from operation_menu
+        where
+        id = #{pk}
+    </select>
+
+    <select id="selectPks" resultMap="OperationMenuResultMap" parameterType="java.util.List">
+        select
+        <include refid="table_columns"/>
+        from operation_menu
+        where id  in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <!-- 根据Map参数查询 -->
+    <select id="select" resultMap="OperationMenuResultMap" parameterType="java.util.Map">
+        select <include refid="table_columns" />
+        from operation_menu
+        <include refid="whereSql" />
+        <if test="orderBy != null and orderBy != ''">
+            order by ${orderBy}
+        </if>
+    </select>
+
+    <!-- 根据Map参数查询 -->
+    <select id="selectOne" resultMap="OperationMenuResultMap" parameterType="java.util.Map">
+        select <include refid="table_columns" />
+        from operation_menu
+        <include refid="whereSql" />
+        limit 0,1
+    </select>
+
+    <!-- 分页查询 -->
+    <select id="selectPage" resultMap="OperationMenuResultMap" parameterType="java.util.Map">
+        select <include refid="table_columns" />
+        from operation_menu
+        <include refid="whereSql" />
+        <if test="orderBy != null and orderBy != ''">
+            order by ${orderBy}
+        </if>
+    </select>
+
+    <!-- 使用like用法：columnName like concat('%',#columnName#,'%') -->
+    <sql id="whereSql">
+        <trim prefix="where" prefixOverrides="and | or ">
+
+            <if test="id != null "> and id = #{id} </if>
+            <if test="parentId != null "> and parent_id = #{parentId} </if>
+            <if test="name != null "> and name = #{name} </if>
+            <if test="sortBy != null "> and sort_by = #{sortBy} </if>
+            <if test="type != null "> and type = #{type} </if>
+            <if test="icon != null "> and icon = #{icon} </if>
+            <if test="url != null "> and url = #{url} </if>
+            <if test="permissionDetail != null "> and permission_detail = #{permissionDetail} </if>
+            <if test="remark != null "> and remark = #{remark} </if>
+            <if test="state != null "> and state = #{state} </if>
+            <if test="createUser != null "> and create_user = #{createUser} </if>
+            <if test="updateUser != null "> and update_user = #{updateUser} </if>
+            <if test="createTime != null "> and create_time = #{createTime} </if>
+            <if test="updateTime != null "> and update_time = #{updateTime} </if>
+        </trim>
+    </sql>
+
+    <!--根据账号查询用户信息-->
+    <select id="selectMenuListByPermissionDetailS" resultType="java.lang.Integer">
+        select id
+        from operation_menu
+        where
+        state = 0 and
+        <if test="null != list and list.size > 1">
+            permissionDetail in
+            <foreach collection="list" index="index" item="item" open="("
+                     separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="null != list and list.size = 1">
+            permissionDetail =
+            <foreach collection="list" index="index" item="item" >
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+
+    <!--查询全部菜单排序根据父节点id和排序-->
+    <select id="selectMenuAll" resultMap="OperationMenuResultMap">
+        select <include refid="table_columns" />
+        from operation_menu
+        order by parent_id, sort_by
+    </select>
+
+    <!--查询全部有效的菜单排序根据父节点id和排序-->
+    <select id="selectValidMenuVOAll" resultType="com.wys.dubbo.dto.OperationMenuDto">
+        select <include refid="table_columns" />
+        from operation_menu
+        where state = 0
+        order by parent_id, sort_by
+    </select>
+
+    <!--根据用户Id查询有效的菜单-->
+    <select id="selectMenuAllByUserId" parameterType="java.lang.Integer" resultMap="OperationMenuResultMap">
+        select distinct om.id, om.parent_id,
+        om.name,
+        om.sort_by,
+        om.type,
+        om.icon,
+        om.url,
+        om.permission_detail,
+        om.remark,
+        om.state,
+        om.create_user,
+        om.update_user,
+        om.create_time,
+        om.update_time
+
+        from operation_menu om
+        LEFT JOIN operation_role_permission orp on om.id = orp.operation_menu_id
+        LEFT JOIN operation_user_role our on our.operation_role_id = orp.operation_role_id
+        LEFT JOIN operation_role or on or.id = our.operation_role_id
+        where our.user_id = #{userId}
+        and om.state = 0
+        order by om.parent_id, om.sort_by
+    </select>
+
+    <!--根据userId查询所有有效权限-->
+    <select id="selectPermsByUserId" resultType="java.lang.String" parameterType="java.lang.Integer">
+        select distinct om.perms
+        from operation_menu om
+        left join operation_role_permission orp on om.id = orp.operation_menu_id
+        left join operation_user_role our on orp.role_id = our.role_id
+        where our.user_id = #{userId}
+        and om.state = 0
+    </select>
+
+    <!--根据userId查询所有有效菜单Id-->
+    <select id="selectMenuByUserId" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        select distinct om.id
+        from operation_menu om
+        left join operation_role_permission orp on om.id = orp.operation_menu_id
+        left join operation_user_role our on orp.role_id = our.role_id
+        where our.user_id = #{userId}
+        and om.state = 0
+    </select>
+
+    <!--查询全部有效的菜单排序根据父节点id和排序-->
+    <select id="selectValidMenuTreeAll" resultType="com.wys.dubbo.dto.OperationMenuTreeDto">
+        select
+        id,
+        parent_id as parentId,
+        name,
+        icon,
+        url
+        from operation_menu
+        where state = 0
+        order by parent_id, sort_by
+    </select>
+
+    <!--根据角色Id查询所有有效菜单Id-->
+    <select id="selectMenuByRoleId" resultType="java.lang.Integer" >
+        select distinct om.id
+        from operation_menu om
+        left join operation_role_permission orp on om.id = orp.operation_menu_id
+        where orp.operation_role_id = #{roleId}
+        and om.state = 0
+    </select>
+
+    <!--查询当前最大id和总数-->
+    <select id="queryCountMaxMenu" resultType="com.wys.dubbo.dto.response.OperationMenuPageRes" >
+        select count(id) as total ,ifNull(max(id),0)  as maxId
+        from operation_menu
+        <where>
+            <if test="menuReq.createTimeStart != null">
+                AND create_time >=#{menuReq.createTimeStart}
+            </if>
+            <if test="menuReq.createTimeEnd != null">
+                <![CDATA[
+				AND create_time <#{menuReq.createTimeEnd}
+				]]>
+            </if>
+            <if test="menuReq.state != null">
+                AND menu_state = #{menuReq.state}
+            </if>
+            <if test="menuReq.searchKey!=null and menuReq.searchKey!=''">
+                AND name like concat('%',#{menuReq.searchKey},'%')
+            </if>
+
+            <if test="menuReq.maxId != null and menuReq.maxId >0 ">
+                and id &lt;= #{roleReq.maxId}
+            </if>
+        </where>
+        order by id desc,sort_by asc
+    </select>
+
+    <!-- 分页查询 -->
+    <select id="selectMenuPage" resultType="com.wys.dubbo.dto.OperationMenuDto" >
+        select <include refid="table_columns_alias" />
+        from operation_menu
+        <where>
+            <if test="menuReq.createTimeStart != null">
+                AND create_time >=#{menuReq.createTimeStart}
+            </if>
+            <if test="menuReq.createTimeEnd != null">
+                <![CDATA[
+				AND create_time <#{menuReq.createTimeEnd}
+				]]>
+            </if>
+            <if test="menuReq.state != null">
+                AND menu_state = #{menuReq.state}
+            </if>
+            <if test="menuReq.searchKey!=null and menuReq.searchKey!=''">
+                AND name like concat('%',#{menuReq.searchKey},'%')
+            </if>
+
+            <if test="menuReq.maxId != null and menuReq.maxId >0 ">
+                and id &lt;= #{roleReq.maxId}
+            </if>
+        </where>
+        order by id desc,sort_by asc
+        limit #{menuReq.page},#{menuReq.limit}
+    </select>
+
+</mapper>
