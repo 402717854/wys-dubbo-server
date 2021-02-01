@@ -16,7 +16,7 @@ import com.wys.dubbo.service.OperationUserService;
 import com.wys.dubbo.util.Md5Util;
 import com.wys.dubbo.util.RedisUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.dubbo.config.annotation.Service;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.Valid;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
  * @Date 2021/1/25-10:31
  * @Version V1.0
  **/
-@Service
+@DubboService
 public class DubboUserServiceClientImpl implements DubboUserServiceClient {
 
     @Autowired

@@ -8,7 +8,7 @@ import com.wys.dubbo.dto.response.OperationRolePageRes;
 import com.wys.dubbo.result.RpcExecuteResult;
 import com.wys.dubbo.service.DubboRoleServiceClient;
 import com.wys.dubbo.service.OperationRoleService;
-import org.apache.dubbo.config.annotation.Service;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.Valid;
@@ -20,7 +20,7 @@ import javax.validation.Valid;
  * @Date 2021/1/25-10:34
  * @Version V1.0
  **/
-@Service
+@DubboService
 public class DubboRoleServiceClientImpl implements DubboRoleServiceClient {
 
     @Autowired

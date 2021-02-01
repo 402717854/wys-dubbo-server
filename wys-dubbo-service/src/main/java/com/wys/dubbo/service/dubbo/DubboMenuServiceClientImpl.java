@@ -9,7 +9,7 @@ import com.wys.dubbo.dto.response.OperationValidMenuTreeRes;
 import com.wys.dubbo.result.RpcExecuteResult;
 import com.wys.dubbo.service.DubboMenuServiceClient;
 import com.wys.dubbo.service.OperationMenuService;
-import org.apache.dubbo.config.annotation.Service;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.Valid;
@@ -23,7 +23,7 @@ import java.util.Set;
  * @Date 2021/1/25-10:33
  * @Version V1.0
  **/
-@Service
+@DubboService
 public class DubboMenuServiceClientImpl implements DubboMenuServiceClient {
     @Autowired
     private OperationMenuService operationMenuService;

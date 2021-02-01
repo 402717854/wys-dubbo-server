@@ -10,13 +10,13 @@ import org.apache.dubbo.config.annotation.DubboService;
  * @Author: 86133
  * @Date: 2021/01/25
  */
-@DubboService(version = "1.0.0")
-public class DubboDemoServiceClientImpl implements DubboDemoServiceClient {
+@DubboService(version = "2.0.0")
+public class DubboDemoServiceClientImpl2 implements DubboDemoServiceClient {
     @Override
     public RpcExecuteResult get() {
         DemoResultDto resultDto = new DemoResultDto();
         resultDto.setId(1);
-        resultDto.setDescription("description");
+        resultDto.setDescription("description------123456789");
         return RpcExecuteResult.ok(resultDto);
    }
 }
