@@ -14,6 +14,8 @@
     <modules>
         <module>wys-dubbo-api</module>
         <module>wys-dubbo-service</module>
+        <module>wys-dubbo-service2</module>
+        <module>wys-dubbo-service3</module>
     </modules>
 
     <properties>
