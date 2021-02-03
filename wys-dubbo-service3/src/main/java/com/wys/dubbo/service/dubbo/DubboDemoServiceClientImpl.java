@@ -5,6 +5,8 @@ import com.wys.dubbo.result.RpcExecuteResult;
 import com.wys.dubbo.service.DubboDemoServiceClient;
 import org.apache.dubbo.config.annotation.DubboService;
 
+import java.util.concurrent.CompletableFuture;
+
 /**
  * @Description: dubbo demo
  * @Author: 86133
@@ -19,4 +21,9 @@ public class DubboDemoServiceClientImpl implements DubboDemoServiceClient {
         resultDto.setDescription("description---20882");
         return RpcExecuteResult.ok(resultDto);
    }
+
+    @Override
+    public CompletableFuture<RpcExecuteResult> asyncGet() {
+        return null;
+    }
 }

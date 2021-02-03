@@ -199,6 +199,43 @@ dubbo脚手架构建步骤
     正数：单位为毫秒，表示在提供者对象创建完毕后的指定时间后再发布服务
     0:默认值，表示在提供者对象创建完毕后马上向注册中心暴露服务
     -1:表示Spring容器初始化完毕后再向注册中心暴露服务
+###消费者端的异步调用
+    @DubboReference(async = true)
+    @DubboReference(version = "1.0.0",methods = {@Method(name="get",async = true)})
+####无返回值
+    消费端直接调用服务端服务接口方法
+####返回值同步阻塞
+    Future<RpcExecuteResult> future = RpcContext.getContext().getFuture();
+####返回值无阻塞
+    服务端使用CompletableFuture<RpcExecuteResult>作为返回值
+    客户端不设置async属性
+    获取异步方法返回通知
+    completableFuture.whenComplete(new BiConsumer<RpcExecuteResult, Throwable>() {
+            @Override
+            public void accept(RpcExecuteResult rpcExecuteResult, Throwable throwable) {
+                
+            }
+        });
+###提供者端的异步调用
+    CompletableFuture<RpcExecuteResult> future = CompletableFuture.supplyAsync(new Supplier<RpcExecuteResult>() {
+        @Override
+        public RpcExecuteResult get() {
+                DemoResultDto resultDto = new DemoResultDto();
+                resultDto.setId(1);
+                resultDto.setDescription("description");
+                RpcExecuteResult<DemoResultDto> rpcExecuteResult = RpcExecuteResult.ok(resultDto);
+                sleep("get2",start);
+            return rpcExecuteResult;
+        }
+    });
+###属性配置优先级
+       方法级优先，接口次之，全局配置最后；
+       如果级别一样，消费方优先，提供方次之
+       dubbo.consumer.用于设置消费端的默认配置
+       dubbo.provider.用于设置提供端的默认配置
+   
+
+     
      
     
     

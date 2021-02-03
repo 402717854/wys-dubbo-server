@@ -5,6 +5,8 @@ import com.wys.dubbo.result.RpcExecuteResult;
 import com.wys.dubbo.service.DubboDemoServiceClient;
 import org.apache.dubbo.config.annotation.DubboService;
 
+import java.util.concurrent.CompletableFuture;
+
 @DubboService(group = "pay.zhifubao")
 public class ZhifubaoServiceClientImpl implements DubboDemoServiceClient {
     @Override
@@ -13,5 +15,15 @@ public class ZhifubaoServiceClientImpl implements DubboDemoServiceClient {
         resultDto.setId(1);
         resultDto.setDescription("使用支付宝支付");
         return RpcExecuteResult.ok(resultDto);
+    }
+
+    @Override
+    public CompletableFuture<RpcExecuteResult> get2() {
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<RpcExecuteResult> asyncGet() {
+        return null;
     }
 }

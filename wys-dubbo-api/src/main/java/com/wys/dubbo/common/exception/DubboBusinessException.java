@@ -2,6 +2,8 @@ package com.wys.dubbo.common.exception;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.text.MessageFormat;
 
@@ -10,7 +12,8 @@ import java.text.MessageFormat;
  * @Date: 2021/01/27
  * @Description:: 业务异常
  */
-@Data
+@Setter
+@Getter
 @EqualsAndHashCode(callSuper=true)
 public class DubboBusinessException extends RuntimeException {
 
